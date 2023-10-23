@@ -32,6 +32,9 @@ impl<T> ListItem<T> {
     fn data(&self) -> &T {
         self.data.as_ref()
     }
+    fn as_mut(&mut self) -> &mut Self {
+        self
+    }
 }
 
 impl<T> SinglyLinkedList<T> {
@@ -41,7 +44,11 @@ impl<T> SinglyLinkedList<T> {
         }
     }
     fn append(&mut self, data: T) {
-        let tail = self.head.mut_tail();
+        //let tail = self.head.mut_tail();
+        let mut tail = self.head.as_mut();
+        while tail.next.is_some() {
+            tail = tail.next.as_mut().unwrap()
+        }
         tail.next = Some(Box::new(ListItem::new(data)));
     }
     fn head(&self) -> &ListItem<T> {
