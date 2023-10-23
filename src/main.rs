@@ -1,61 +1,6 @@
 
-struct ListItem<T> {
-    data: Box<T>,
-    next: Option<Box<ListItem<T>>>,
-}
-
-struct SinglyLinkedList<T> {
-    head: ListItem<T>,
-}
-
-impl<T> ListItem<T> {
-    fn new(data: T) -> Self {
-        ListItem {
-            data: Box::new(data),
-            next: None
-        }
-    }
-    fn next(&self) -> Option<&Self> {
-        if let Some(next) = &self.next {
-            Some(next.as_ref())    // OR Some(&*next)
-        } else {
-            None
-        }
-    }
-    fn data(&self) -> &T {
-        self.data.as_ref()
-    }
-    fn as_mut(&mut self) -> &mut Self {
-        self
-    }
-}
-
-impl<T> SinglyLinkedList<T> {
-    fn new(data: T) -> Self {
-        SinglyLinkedList {
-            head: ListItem::new(data),
-        }
-    }
-    fn append(&mut self, data: T) {
-        let mut tail = self.head.as_mut();
-        while tail.next.is_some() {
-            tail = tail.next.as_mut().unwrap()
-        }
-        tail.next = Some(Box::new(ListItem::new(data)));
-    }
-    fn head(&self) -> &ListItem<T> {
-        &self.head
-    }
-
-    fn tail(&self) -> &ListItem<T> {
-        let mut tail = &self.head;
-        while tail.next.is_some() {
-            tail = tail.next.as_ref().unwrap()
-        }
-        tail
-    }
-}
-
+mod linked_list;
+use linked_list::SinglyLinkedList;
 
 fn main() {
     let mut list = SinglyLinkedList::new("head");
@@ -64,6 +9,7 @@ fn main() {
     list.append("middle_after_2");
     list.append("before_tail");
     list.append("tail");
+    println!("{}", list);
     let mut item = list.head();
     loop {
         println!("item: {}", item.data());
@@ -74,5 +20,5 @@ fn main() {
         }
     }
     let tail = list.tail();
-    println!("item: {}", tail.data());
+    println!("tail: {}", tail.data());
 }
