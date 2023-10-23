@@ -22,13 +22,6 @@ impl<T> ListItem<T> {
             None
         }
     }
-    fn mut_tail(&mut self) -> &mut Self {
-        if self.next.is_some() {
-            self.next.as_mut().unwrap().mut_tail()
-        } else {
-            self
-        }
-    }
     fn data(&self) -> &T {
         self.data.as_ref()
     }
@@ -44,7 +37,6 @@ impl<T> SinglyLinkedList<T> {
         }
     }
     fn append(&mut self, data: T) {
-        //let tail = self.head.mut_tail();
         let mut tail = self.head.as_mut();
         while tail.next.is_some() {
             tail = tail.next.as_mut().unwrap()
@@ -53,6 +45,14 @@ impl<T> SinglyLinkedList<T> {
     }
     fn head(&self) -> &ListItem<T> {
         &self.head
+    }
+
+    fn tail(&self) -> &ListItem<T> {
+        let mut tail = &self.head;
+        while tail.next.is_some() {
+            tail = tail.next.as_ref().unwrap()
+        }
+        tail
     }
 }
 
@@ -73,4 +73,6 @@ fn main() {
             break;
         }
     }
+    let tail = list.tail();
+    println!("item: {}", tail.data());
 }
