@@ -1,6 +1,8 @@
 
 mod linked_list;
-use linked_list::SinglyLinkedList;
+mod linked_list_rc;
+use linked_list_rc::SinglyLinkedList;
+use std::rc::Rc;
 
 fn main() {
     let mut list = SinglyLinkedList::new("head");
@@ -10,15 +12,18 @@ fn main() {
     list.append("before_tail");
     list.append("tail");
     println!("{}", list);
+
     let mut item = list.head();
+
     loop {
-        println!("item: {}", item.data());
-        if let Some(next_item) = item.next() {
+        println!("item: {}", item.borrow().data());
+        if let Some(next_item) = Rc::clone(&item).borrow().next() {
             item = next_item;
         } else {
             break;
         }
     }
+
     let tail = list.tail();
-    println!("tail: {}", tail.data());
+    println!("tail: {}", tail.borrow().data());
 }
