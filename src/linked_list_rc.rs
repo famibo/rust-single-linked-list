@@ -1,6 +1,10 @@
 use std::fmt;
-use std::cell::RefCell;
+use std::cell::{RefCell, Ref};
 use std::rc::Rc;
+
+pub trait ItemRefExt<T> {
+    fn inner_element(&self) -> Ref<ListItem<T>> ;
+}
 
 type ItemRef<T> = Rc<RefCell<ListItem<T>>>;
 #[derive(Debug)]
@@ -12,6 +16,13 @@ pub struct ListItem<T> {
 #[derive(Debug)]
 pub struct SinglyLinkedList<T> {
     head: ItemRef<T>,
+}
+
+impl<T> ItemRefExt<T> for ItemRef<T> {
+     fn inner_element(&self) -> Ref<ListItem<T>> {
+         // Please note: being only a wrapper for the borrow() call, this implementation doesn't make a lot of sense
+         self.borrow()
+    }
 }
 
 impl<T> ListItem<T> {
