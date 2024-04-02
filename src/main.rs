@@ -15,11 +15,12 @@ fn main() {
     println!("{}", list);
 
     let mut item = list.head();
+    //let inner = item.inner_element();
     println!("item inner_element: {}", item.inner_element().data());
 
     loop {
         println!("item: {}", item.borrow().data());
-        if let Some(next_item) = Rc::clone(&item).borrow().next() {
+        if let Some(next_item) =  Rc::clone(&item).borrow().next() {
             item = next_item;
         } else {
             break;
